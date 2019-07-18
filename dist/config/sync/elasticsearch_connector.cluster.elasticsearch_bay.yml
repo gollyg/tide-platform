@@ -1,0 +1,19 @@
+uuid: 1584ac06-7696-4e1a-85d5-141f48e262c0
+langcode: en
+status: '1'
+dependencies: {  }
+cluster_id: elasticsearch_bay
+name: 'ElasticSearch on Bay'
+url: 'http://%%SEARCH_HASH%%.nginx.sdp-elastic-master.svc:8080'
+options:
+  multiple_nodes_connection: false
+  use_authentication: 1
+  authentication_type: Basic
+  username: dpc
+  password: f8TZfzjx
+  timeout: '3'
+  rewrite:
+    rewrite_index: 1
+    index:
+      prefix: elasticsearch_index_drupal_
+      suffix: ''

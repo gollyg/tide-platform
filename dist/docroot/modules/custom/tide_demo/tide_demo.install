@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ * Install file for core.
+ */
+
+use Drupal\Component\Utility\SortArray;
+use Drupal\tide_demo\TideDemoRepository;
+
+/**
+ * Implements hook_schema().
+ */
+function tide_demo_schema() {
+  $schema['tide_demo'] = [
+    'description' => 'Stores demo content.',
+    'fields' => [
+      'entity_type' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'description' => 'Entity type.',
+      ],
+      'bundle' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'description' => 'Entity bundle.',
+      ],
+      'entity_id' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Entity ID.',
+      ],
+    ],
+    'primary key' => ['entity_type', 'bundle', 'entity_id'],
+    'indexes' => [
+      'entity_type' => ['entity_type'],
+      'bundle' => ['bundle'],
+      'entity_id' => ['entity_id'],
+    ],
+  ];
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function tide_demo_install() {
+  $base_path = drupal_get_path('module', 'tide_demo') . '/content';
+  $default_weights = [
+    'user' => -100,
+    'menu' => -90,
+    'taxonomy_term' => -80,
+    'media' => -50,
+    'node' => 0,
+    'block_content' => -10,
+  ];
+  $available_demo = [];
+
+  $info = \Drupal::service('entity_type.bundle.info')->getAllBundleInfo();
+  foreach ($info as $entity_type_id => $bundles) {
+    foreach (array_keys($bundles) as $bundle) {
+      $demo_inc = $base_path . '/' . $entity_type_id . '/' . $bundle . '.inc';
+      if (file_exists($demo_inc)) {
+        include_once $demo_inc;
+
+        $demo_function = 'tide_demo_create_' . $entity_type_id . '_' . $bundle;
+        if (function_exists($demo_function)) {
+          $available_demo[$demo_function] = [
+            '#callback' => $demo_function,
+            '#tracking' => TRUE,
+            '#weight' => isset($default_weights[$entity_type_id]) ? $default_weights[$entity_type_id] : 0,
+          ];
+          $demo_weight_function = 'tide_demo_create_' . $entity_type_id . '_' . $bundle . '_weight';
+          if (function_exists($demo_weight_function)) {
+            $available_demo[$demo_function]['#weight'] = $demo_weight_function();
+          }
+          $demo_tracking_function = 'tide_demo_create_' . $entity_type_id . '_' . $bundle . '_tracking';
+          if (function_exists($demo_tracking_function)) {
+            $available_demo[$demo_function]['#tracking'] = $demo_tracking_function();
+          }
+        }
+      }
+    }
+  }
+
+  uasort($available_demo, [SortArray::class, 'sortByWeightProperty']);
+  $repository = TideDemoRepository::getInstance();
+  foreach ($available_demo as $demo) {
+    $demo_entities = $demo['#callback']();
+    $repository->addDemoEntities($demo_entities, $demo['#tracking']);
+  }
+  \Drupal::messenger()->addMessage('Created all demo content.');
+  \Drupal::cache('data')->deleteAll();
+  \Drupal::cache('dynamic_page_cache')->deleteAll();
+  \Drupal::cache('entity')->deleteAll();
+  \Drupal::cache('page')->deleteAll();
+  \Drupal::cache('render')->deleteAll();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function tide_demo_uninstall() {
+  $repository = TideDemoRepository::getInstance();
+  $repository->removeTrackedEntities();
+  \Drupal::messenger()->addMessage('Removed all demo content.');
+}

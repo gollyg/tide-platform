@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * @file
+ * Install file for core.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function YOUR_SITE_core_install() {
+  $functions = get_defined_functions();
+  foreach ($functions['user'] as $function) {
+    if (strpos($function, 'YOUR_SITE_core_update_') === 0) {
+      call_user_func($function);
+    }
+  }
+}
+
+/**
+ * Helper to enable modules.
+ */
+function YOUR_SITE_core_enable_modules($is_install = false) {
+  $environment = Settings::get('environment');
+
+  if ($is_install) {
+    if ($environment == 'development') {
+      YOUR_SITE_core_install_module('shield');
+    }
+
+    if ($environment == 'ci') {
+      YOUR_SITE_core_install_module('tide_test');
+    }
+
+    if ($environment == 'ci' || $environment == 'development') {
+      YOUR_SITE_core_install_module('tide_demo');
+    }
+  } else {
+    // Enable 'config_devel' in local environment only.
+    if ($environment == 'local') {
+      YOUR_SITE_core_install_module('config_devel');
+    }
+
+    // Enable 'tide_test' in local and CI environments.
+    if ($environment == 'local' || $environment == 'ci') {
+      YOUR_SITE_core_install_module('tide_test');
+    }
+
+    if ($environment == 'local' || $environment == 'ci' || $environment == 'development') {
+      YOUR_SITE_core_install_module('tide_demo');
+    }
+  }
+}
+
+/**
+ * Helper to enable modules.
+ */
+function YOUR_SITE_core_default_content_modules() {
+  YOUR_SITE_core_install_module('default_content');
+  \Drupal::service('default_content.importer')->importContent('YOUR_SITE_core');
+  \Drupal::service('module_installer')->uninstall(['default_content']);
+}
+
+/**
+ * Helper to install a module.
+ *
+ * @param string $module
+ *   Module name.
+ *
+ * @throws \Exception
+ *   When module was not installed.
+ */
+function YOUR_SITE_core_install_module($module) {
+  $result = \Drupal::service('module_installer')->install([$module]);
+  if (!$result) {
+    throw new \Exception(sprintf('Unable to install module %s', $module));
+  }
+
+  /** @var \Drupal\Core\Extension\ModuleHandler $moduleHandler */
+  $moduleHandler = \Drupal::service('module_handler');
+  if (!$moduleHandler->moduleExists($module)) {
+    throw new \Exception(sprintf('Unable to validate install for module %s', $module));
+  }
+}
+
+/**
+ * Creates sites and sections.
+ */
+function YOUR_SITE_core_update_8001() {
+  $sites = [];
+
+  $weight = 0;
+  foreach ($sites as $site => $sections) {
+    $term_site = Term::create([
+      'name' => $site,
+      'vid' => 'sites',
+      'weight' => $weight,
+    ]);
+    $term_site->save();
+
+    foreach ($sections as $section) {
+      $term_section = Term::create([
+        'name' => $section,
+        'vid' => 'sites',
+        'parent' => [$term_site->id()],
+      ]);
+      $term_section->save();
+    }
+    $weight++;
+  }
+}
+

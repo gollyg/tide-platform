@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Core module for %%PROJECT%% Content.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Include additional early bootstrap files.
+ *
+ * This allows to organise contrib module-related hook implementations into
+ * standalone files.
+ *
+ * Note that most of the modules are not available at this stage and
+ * another inclusion is required in hook_init() for performance reasons.
+ */
+$moduleHandler = \Drupal::moduleHandler();
+$early_bootstrap_modules = array_keys($moduleHandler->getModuleList());
+// Add more modules, inclusions for which are absolutely required at early
+// stage.
+$early_bootstrap_modules[] = 'system';
+foreach ($early_bootstrap_modules as $module_name) {
+  $module_include_file = dirname(__FILE__) . '/includes/' . $module_name . '.inc';
+  if (file_exists($module_include_file)) {
+    require_once $module_include_file;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function YOUR_SITE_core_form_node_form_alter(&$form, FormStateInterface $form_state) {
+  $user = \Drupal::currentUser();
+  // Hide Schedule Publishing & Archiving containers from editors,
+  // because scheduled_updates module does not set it properly.
+  if (!$user->hasPermission('administer scheduled updates') &&
+    !$user->hasPermission('create schedule_publishing scheduled updates') &&
+    !$user->hasPermission('edit schedule_publishing scheduled updates')
+  ) {
+    $form['schedule_publishing']['#access'] = FALSE;
+  }
+
+  if (!$user->hasPermission('administer scheduled updates') &&
+    !$user->hasPermission('create schedule_archiving scheduled updates') &&
+    !$user->hasPermission('edit schedule_archiving scheduled updates')
+  ) {
+    $form['schedule_archiving']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_editor_js_settings_alter().
+ */
+function YOUR_SITE_core_editor_js_settings_alter(array &$settings) {
+  foreach (array_keys($settings['editor']['formats']) as $text_format_id) {
+    if ($settings['editor']['formats'][$text_format_id]['editor'] === 'ckeditor') {
+      $settings['editor']['formats'][$text_format_id]['editorSettings']['height'] = '400px';
+      $settings['editor']['formats'][$text_format_id]['editorSettings']['forcePasteAsPlainText'] = TRUE;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_embed_alter().
+ */
+function YOUR_SITE_core_entity_embed_alter(array &$build, EntityInterface $entity, array &$context) {
+  $entity_type = $entity->getEntityTypeId();
+  $bundle = $entity->bundle();
+  $build['#attributes']['class'][] = Html::cleanCssIdentifier('embedded-entity--' . $entity_type);
+  $build['#attributes']['class'][] = Html::cleanCssIdentifier('embedded-entity--' . $entity_type . '--' . $bundle);
+}

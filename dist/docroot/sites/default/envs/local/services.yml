@@ -1,0 +1,64 @@
+parameters:
+  http.response.debug_cacheability_headers: true
+  twig.config: # disabling twig debugging and auto reload, plus enabling twig caching
+      debug: true
+      auto_reload: null
+      cache: false
+  session.storage.options:
+      # Default ini options for sessions.
+      #
+      # Some distributions of Linux (most notably Debian) ship their PHP
+      # installations with garbage collection (gc) disabled. Since Drupal depends
+      # on PHP's garbage collection for clearing sessions, ensure that garbage
+      # collection occurs by using the most common settings.
+      # @default 1
+      gc_probability: 1
+      # @default 100
+      gc_divisor: 100
+      #
+      # Set session lifetime (in seconds), i.e. the time from the user's last
+      # visit to the active session may be deleted by the session garbage
+      # collector. When a session is deleted, authenticated users are logged out,
+      # and the contents of the user's $_SESSION variable is discarded.
+      # @default 200000
+      gc_maxlifetime: 200000
+      #
+      # Set session cookie lifetime (in seconds), i.e. the time from the session
+      # is created to the cookie expires, i.e. when the browser is expected to
+      # discard the cookie. The value 0 means "until the browser is closed".
+      # @default 2000000
+      cookie_lifetime: 200000
+      #
+      # Drupal automatically generates a unique session cookie name based on the
+      # full domain name used to access the site. This mechanism is sufficient
+      # for most use-cases, including multi-site deployments. However, if it is
+      # desired that a session can be reused across different subdomains, the
+      # cookie domain needs to be set to the shared base domain. Doing so assures
+      # that users remain logged in as they cross between various subdomains.
+      # To maximize compatibility and normalize the behavior across user agents,
+      # the cookie domain should start with a dot.
+      #
+      # @default none
+      # cookie_domain: '.example.com'
+      #
+   # Configure Cross-Site HTTP requests (CORS).
+   # Read https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
+   # for more information about the topic in general.
+   # Note: By default the configuration is disabled.
+  cors.config:
+    enabled: true
+    # Specify allowed headers, like 'x-allowed-header'.
+    allowedHeaders: ['x-csrf-token','authorization','content-type','accept','origin','x-requested-with', 'access-control-allow-origin','x-allowed-header','*']
+    # Specify allowed request methods, specify ['*'] to allow all possible ones.
+    allowedMethods: ['POST, GET']
+    # Configure requests allowed from specific origins.
+    allowedOrigins: ['http://localhost:3000']
+    # Sets the Access-Control-Expose-Headers header.
+    exposedHeaders: false
+    # Sets the Access-Control-Max-Age header.
+    maxAge: false
+    # Sets the Access-Control-Allow-Credentials header.
+    supportsCredentials: false
+services:
+  cache.backend.null:
+    class: Drupal\Core\Cache\NullBackendFactory

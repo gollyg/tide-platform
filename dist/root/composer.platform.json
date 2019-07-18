@@ -1,0 +1,320 @@
+{
+  "name": "dpc-sdp/tide-starter-kit",
+  "description": "Drupal 8 site for %%PROJECT%%",
+  "license": "proprietary",
+  "require": {
+    "composer/installers": "^1.2.0",
+    "cweagans/composer-patches": "^1.6.0",
+    "dpc-sdp/bay": "^0.0.1",
+    "dpc-sdp/tide": "^1.0",
+    "dpc-sdp/tide_alert": "^0.0.1",
+    "dpc-sdp/tide_grant": "^0.0.1",
+    "dpc-sdp/tide_profile": "^0.0.1",
+    "drupal-composer/drupal-scaffold": "^2.3",
+    "drupal/admin_toolbar": "^1.20",
+    "drupal/clamav": "^1.1",
+    "drupal/coffee": "^1.0@beta",
+    "drupal/config_filter": "^1.2",
+    "drupal/core": "8.5.10 as 8.5.6",
+    "drupal/default_content": "^1.0@alpha",
+    "drupal/devel": "^1.2",
+    "drupal/jsonapi": "1.23 as 1.24",
+    "drupal/jsonapi_extras": "2.9 as 2.5",
+    "drupal/lagoon_logs": "^1.0",
+    "drupal/migrate_cron": "^1.1",
+    "drupal/migrate_tools": "^4.1",
+    "drupal/range": "^1.1",
+    "drupal/shield": "^1.2",
+    "drupal/stage_file_proxy": "^1.0@alpha",
+    "drush/drush": "^8.1",
+    "library/dropzone": "^4.3",
+    "webflo/drupal-finder": "^1.1",
+    "webmozart/path-util": "^2.3",
+    "zaporylie/composer-drupal-optimizations": "^1.0"
+  },
+  "require-dev": {
+    "behat/behat": "^3.5",
+    "behat/mink-selenium2-driver": "1.3.x-dev",
+    "drupal/config_devel": "^1.2",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+    "drupal/coder": "^8.2.12",
+    "drupal/console": "^1.0",
+    "drupal/drupal-extension": "^3.4",
+    "guzzlehttp/psr7": "^1.4",
+    "integratedexperts/behat-format-progress-fail": "^0.2.1",
+    "integratedexperts/behat-screenshot": "^0.7",
+    "integratedexperts/behat-steps": "^0.1.0",
+    "phpcompatibility/php-compatibility": "^9.1",
+    "php-http/curl-client": "^1.7",
+    "symfony/filesystem": "^3.2.8"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "classmap": [
+      "scripts/composer/"
+    ]
+  },
+  "autoload-dev": {
+    "classmap": [
+      "docroot/core",
+      "dpc-sdp",
+      "tests/unit/"
+    ]
+  },
+  "config": {
+    "platform": {
+      "php": "7.1"
+    },
+    "process-timeout": 0,
+    "sort-packages": true
+  },
+  "conflict": {
+    "drupal/drupal": "*"
+  },
+  "repositories": {
+    "asset-packagist": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    },
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    },
+    "dpc-sdp/bay": {
+      "type": "path",
+      "url": "dpc-sdp/bay"
+    },
+    "dpc-sdp/tide_alert": {
+      "type": "path",
+      "url": "dpc-sdp/tide_alert"
+    },
+    "dpc-sdp/tide_grant": {
+      "type": "path",
+      "url": "dpc-sdp/tide_grant"
+    },
+    "dpc-sdp/tide": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide.git"
+    },
+    "dpc-sdp/tide_api": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_api.git"
+    },
+    "dpc-sdp/tide_core": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_core.git"
+    },
+    "dpc-sdp/tide_event": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_event.git"
+    },
+    "dpc-sdp/tide_landing_page": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_landing_page.git"
+    },
+    "dpc-sdp/tide_media": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_media.git"
+    },
+    "dpc-sdp/tide_monsido": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_monsido.git"
+    },
+    "dpc-sdp/tide_page": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_page.git"
+    },
+    "dpc-sdp/tide_profile": {
+      "type": "path",
+      "url": "dpc-sdp/tide_profile"
+    },
+    "dpc-sdp/tide_news": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_news.git"
+    },
+    "dpc-sdp/tide_search": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_search.git"
+    },
+    "dpc-sdp/tide_site": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_site.git"
+    },
+    "dpc-sdp/tide_test": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_test.git"
+    },
+    "dpc-sdp/tide_webform": {
+      "type": "vcs",
+      "no-api": true,
+      "url": "https://github.com/dpc-sdp/tide_webform.git"
+    },
+    "library/dropzone": {
+      "type": "package",
+      "package": {
+        "name": "library/dropzone",
+        "version": "4.3.0",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/enyo/dropzone/archive/v4.3.0.zip",
+          "type": "zip"
+        }
+      }
+    },
+    "package/ckeditor-iframe": {
+      "type": "package",
+      "package": {
+        "name": "ckeditor/iframe",
+        "type": "drupal-library",
+        "version": "4.5.11",
+        "dist": {
+          "type": "zip",
+          "url": "https://download.ckeditor.com/iframe/releases/iframe_4.5.11.zip",
+          "reference": "master"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    "package/ckeditor-fakeobjects": {
+      "type": "package",
+      "package": {
+        "name": "ckeditor/fakeobjects",
+        "type": "drupal-library",
+        "version": "4.5.11",
+        "dist": {
+          "type": "zip",
+          "url": "https://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.5.11.zip",
+          "reference": "master"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    "package/ckeditor-templates": {
+      "type": "package",
+      "package": {
+        "name": "ckeditor/templates",
+        "type": "drupal-library",
+        "version": "4.5.7",
+        "dist": {
+          "type": "zip",
+          "url": "https://download.ckeditor.com/templates/releases/templates_4.5.7.zip",
+          "reference": "master"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "pre-install-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+    ],
+    "pre-update-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+    ],
+    "post-install-cmd": [
+      "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+    ],
+    "post-update-cmd": [
+      "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+    ]
+  },
+  "extra": {
+    "drupal-scaffold": {
+      "source": "http://cgit.drupalcode.org/drupal/plain/{path}?h={version}",
+      "includes": [
+        ".editorconfig",
+        ".eslintignore",
+        ".gitattributes",
+        ".htaccess",
+        "index.php",
+        "update.php"
+      ],
+      "excludes": [
+        "robots.txt"
+      ],
+      "omit-defaults": true
+    },
+    "enable-patching": true,
+    "composer-exit-on-patch-failure": true,
+    "installer-paths": {
+      "docroot/core": [
+        "type:drupal-core"
+      ],
+      "docroot/modules/contrib/{$name}": [
+        "type:drupal-module"
+      ],
+      "docroot/themes/contrib/{$name}": [
+        "type:drupal-theme"
+      ],
+      "docroot/profiles/contrib/{$name}": [
+        "type:drupal-profile"
+      ],
+      "docroot/libraries/{$name}": [
+        "type:drupal-library"
+      ],
+      "drush/contrib/{$name}": [
+        "type:drupal-drush"
+      ]
+    },
+    "preserve-paths": [
+      "docroot/modules/custom",
+      "docroot/themes/custom",
+      "docroot/drush",
+      "docroot/sites/default/settings.php",
+      "docroot/sites/default/default.settings.local.php",
+      "docroot/sites/default/files"
+    ],
+    "patches": {
+      "behat/gherkin": {
+        "Correctly filter features, now that the base path is correctly set - https://github.com/Behat/Gherkin/pull/129": "https://patch-diff.githubusercontent.com/raw/Behat/Gherkin/pull/129.patch"
+      },
+      "cweagans/composer-patches": {
+        "cweagans/composer-patches": {
+          "Fix for already applied patches - specific to 1.6.5": "patches/composer-patches/fix-applied-patches.patch"
+        },
+        "drupal/core": {
+          "Debug EntityChangedConstraintValidator": "./patches/core/drupal-core-debug-entity-changed-constraint-validator.patch"
+        },
+        "drupal/default_content": {
+          "Do not reimport existing entities - https://www.drupal.org/project/default_content/issues/2698425": "https://www.drupal.org/files/issues/2018-06-05/default_content-dont-reimport-existing-entities-2698425-102.patch"
+        },
+        "drupal/purge_queuer_url": {
+          "Fixing the SQL Sanitize Drush command - https://www.drupal.org/project/purge_queuer_url/issues/2950814": "https://www.drupal.org/files/issues/2950814-drush-sanitize-service-check.patch"
+        },
+        "dpc-sdp/tide_core": {
+          "[SDPA-1630] Webform submission event": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_core/pull/58.patch",
+          "[SDPA-1783] Removed summary field from related links and whats next": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_core/pull/59.patch",
+          "[SDPA-2026] Add Drush 8 command to run scheduled updates cron": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_core/pull/61.patch"
+        },
+        "dpc-sdp/tide_event": {
+          "[SDPA-1630] Webform submission event": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_event/pull/25.patch",
+          "[SDPA-1903] Update webform event submit action to be used by JSON API": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_event/pull/28.patch",
+          "[SDPA-1891] Enable Category and Requirements to be processed with multi-values": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_event/pull/27.patch",
+          "[SDPA-1882] Add conditional disabled status for price fields": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_event/pull/29.patch",
+          "[SDPA-1933] Event webform submit - Map event submission to body field": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_event/pull/33.patch"
+        },
+        "dpc-sdp/tide_media": {
+          "[SDPA-1759] Enable ics files ": "https://patch-diff.githubusercontent.com/raw/dpc-sdp/tide_media/pull/18.patch"
+        }
+      }
+    }
+  }
+}

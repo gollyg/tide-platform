@@ -1,0 +1,31 @@
+diff --git a/core/lib/Drupal/Core/Entity/Plugin/Validation/Constraint/EntityChangedConstraintValidator.php b/core/lib/Drupal/Core/Entity/Plugin/Validation/Constraint/EntityChangedConstraintValidator.php
+index 28d81ba6e4..3c38da2f24 100644
+--- a/core/lib/Drupal/Core/Entity/Plugin/Validation/Constraint/EntityChangedConstraintValidator.php
++++ b/core/lib/Drupal/Core/Entity/Plugin/Validation/Constraint/EntityChangedConstraintValidator.php
+@@ -17,6 +17,7 @@ public function validate($entity, Constraint $constraint) {
+     if (isset($entity)) {
+       /** @var \Drupal\Core\Entity\EntityInterface $entity */
+       if (!$entity->isNew()) {
++        error_log(print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 25), true));
+         $saved_entity = \Drupal::entityManager()->getStorage($entity->getEntityTypeId())->loadUnchanged($entity->id());
+         // Ensure that all the entity translations are the same as or newer
+         // than their current version in the storage in order to avoid
+@@ -25,12 +26,18 @@ public function validate($entity, Constraint $constraint) {
+         // translations are being concurrently edited.
+         if ($saved_entity) {
+           $common_translation_languages = array_intersect_key($entity->getTranslationLanguages(), $saved_entity->getTranslationLanguages());
++          error_log(print_r($common_translation_languages, true));
+           foreach (array_keys($common_translation_languages) as $langcode) {
+             // Merely comparing the latest changed timestamps across all
+             // translations is not sufficient since other translations may have
+             // been edited and saved in the meanwhile. Therefore, compare the
+             // changed timestamps of each entity translation individually.
+             if ($saved_entity->getTranslation($langcode)->getChangedTime() > $entity->getTranslation($langcode)->getChangedTime()) {
++              error_log($langcode);
++              error_log(get_class($constraint));
++              error_log($constraint->message);
++              error_log(get_class($saved_entity->getTranslation($langcode)));
++              error_log(get_class($entity->getTranslation($langcode)));
+               $this->context->addViolation($constraint->message);
+               break;
+             }

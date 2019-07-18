@@ -1,0 +1,14 @@
+uuid: 1584ac06-7696-4e1a-85d5-141f48e262c0
+langcode: en
+status: '1'
+dependencies: {  }
+cluster_id: elasticsearch_bay
+name: 'ElasticSearch on Bay'
+url: 'http://elasticsearch:9200'
+options:
+  multiple_nodes_connection: false
+  use_authentication: 0
+  authentication_type: Basic
+  username: ''
+  password: ''
+  timeout: '3'

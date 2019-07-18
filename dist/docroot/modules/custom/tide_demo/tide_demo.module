@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Main functions.
+ */
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_delete().
+ */
+function tide_demo_entity_delete(EntityInterface $entity) {
+  try {
+    Database::getConnection()->delete('tide_demo')
+      ->condition('entity_type', $entity->getEntityTypeId())
+      ->condition('bundle', $entity->bundle())
+      ->condition('entity_id', $entity->id())
+      ->execute();
+  }
+  catch (Exception $exception) {
+    watchdog_exception('tide_demo', $exception);
+  }
+}
+
+/**
+ * Implements hook_config_ignore_settings_alter().
+ */
+function tide_demo_config_ignore_settings_alter(array &$settings) {
+  // Ignore all demo config.
+  $settings[] = '*tide_demo*';
+  $settings[] = '*dhhs-demo*';
+}

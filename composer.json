@@ -1,0 +1,9 @@
+{
+    "name": "dpc-sdp/platform-tools",
+    "description": "Platform tools for SDP drupal installation.",
+    "require": {
+        "consolidation/robo": "^1.4.9",
+        "symfony/dotenv": "^4.3.0"
+    },
+    "minimum-stability": "dev"
+}

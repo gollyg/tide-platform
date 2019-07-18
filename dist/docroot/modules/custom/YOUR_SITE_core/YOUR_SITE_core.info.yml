@@ -1,0 +1,19 @@
+name: YOUR_SITE
+type: module
+description: Core feature for site settings.
+core: 8.x
+version: 8.x-1.0
+package: dhhs
+dependencies:
+  - admin_toolbar:admin_toolbar
+  - admin_toolbar:admin_toolbar_tools
+  - coffee:coffee
+  - config_update:config_filter
+  - config_update:config_ignore
+  - config_update:config_split
+  - config_update:config_update
+  - drupal:field_ui
+  - drupal:inline_form_errors
+  - drupal:syslog
+  - environment_indicator:environment_indicator
+  - stage_file_proxy:stage_file_proxy

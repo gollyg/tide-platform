@@ -1,0 +1,84 @@
+docker-compose-yaml: docker-compose.yml
+
+project: content-vic
+endpoint: api-lagoon-master.lagoon.vicsdp.amazee.io:30454
+api: api-lagoon-master.lagoon.vicsdp.amazee.io:80
+
+tasks:
+  post-rollout:
+    - run:
+        name: env variables
+        command: env
+        service: cli
+    - run:
+        name: Import or backup DB.
+        command: |
+          if [[ "$LAGOON_GIT_BRANCH" != "production" ]]; then
+            if [[ -z "$PERSIST_DB" ]]; then
+              ./scripts/drush-download-db.sh
+              ./scripts/drupal/import-db.sh
+            fi
+          else
+            ./scripts/drupal/backup.sh
+          fi
+        service: cli
+    - run:
+        name: Deploy drupal.
+        command: |
+          if [[ "$INSTALL_NEW_SITE" = "1" ]]; then
+            ./scripts/drupal/install-new-site.sh
+          else
+            ./scripts/drupal/deploy.sh
+          fi
+        service: cli
+
+environments:
+  production:
+    cronjobs:
+      - name: drush cron
+        schedule: "*/15 * * * *"
+        command: 'drush cron'
+        service: cli
+      - name: drush scheduled updates cron
+        schedule: "2,7,12,17,22,27,32,37,42,47,52,57 * * * *"
+        command: 'drush tide-core-scheduled-updates-cron'
+        service: cli
+      - name: Database Backups
+        schedule: "0 1,5,9,13,17,21 * * *"
+        command: 'bash /app/scripts/drupal/backup-scheduled.sh /app/docroot %%PROJECT%%'
+        service: cli
+    routes:
+      - %%DOMAIN%%
+      - www.%%DOMAIN%%
+  master:
+    routes:
+      - master.%%DOMAIN%%
+      - www.master.%%DOMAIN%%
+  develop:
+    routes:
+      - develop.%%DOMAIN%%
+      - www.develop.%%DOMAIN%%
+  sandbox:
+    cronjobs:
+      - name: drush cron
+        schedule: "*/15 * * * *"
+        command: 'drush cron'
+        service: cli
+  api:
+    cronjobs:
+      - name: drush cron
+        schedule: "*/15 * * * *"
+        command: 'drush cron'
+        service: cli
+    routes:
+      - nginx-php:
+        - "api.%%DOMAIN%%"
+  api-edge:
+    cronjobs:
+      - name: drush cron
+        schedule: "*/15 * * * *"
+        command: 'drush cron'
+        service: cli
+    routes:
+      - nginx-php:
+        - "api-edge.%%DOMAIN%%"
